@@ -71,6 +71,7 @@ export default defineComponent({
 #notes {
   display: flex;
   flex-direction: column;
+  align-items: center;
   gap: 15px;
   padding: 15px;
 
@@ -83,9 +84,16 @@ export default defineComponent({
     width: 100%;
     display: flex;
     flex-direction: column;
+    align-items: center;
     gap: 5px;
 
+    @media screen and (min-width: 800px) {
+      width: 50%;
+    }
+
     textarea {
+      width: 100%;
+      min-height: 150px;
       padding: 10px 5px;
       border: 1px solid #cce3de;
       background: #a4c3b2;
@@ -101,6 +109,7 @@ export default defineComponent({
       font-family: Ubuntu;
       color: #6b9080;
       width: 50%;
+      max-width: 150px;
     }
   }
 
@@ -109,6 +118,10 @@ export default defineComponent({
     flex-wrap: wrap;
     justify-content: center;
     gap: 5px;
+
+    @media screen and (min-width: 800px) {
+      width: 50%;
+    }
 
     li {
       position: relative;
