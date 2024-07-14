@@ -1,35 +1,7 @@
 <!-- src/components/Notes.vue -->
-<template>
-  <div>
-    <h1>Notes</h1>
-    <form @submit.prevent="addNote">
-      <input v-model="newNote" placeholder="Add a new note" />
-      <button type="submit">Add Note</button>
-    </form>
-    <ul>
-      <li v-for="note in notes" :key="note.id">
-        <input type="checkbox" v-model="note.completed" @change="updateNote(note)" />
-        <span :style="{ textDecoration: note.completed ? 'line-through' : 'none' }">{{
-          note.text
-        }}</span>
-        <button @click="deleteNote(note.id)">Delete</button>
-      </li>
-    </ul>
-  </div>
-</template>
-
 <script lang="ts">
 import { defineComponent, ref, onMounted } from 'vue'
-import {
-  collection,
-  addDoc,
-  doc,
-  updateDoc,
-  deleteDoc,
-  getDocs,
-  query,
-  orderBy
-} from 'firebase/firestore'
+import { collection, addDoc, doc, deleteDoc, getDocs, query, orderBy } from 'firebase/firestore'
 import { DB } from '../firebaseConfig'
 
 interface Note {
@@ -53,15 +25,9 @@ export default defineComponent({
           createdAt: new Date()
         }
         const docRef = await addDoc(collection(DB, 'notes'), note)
-        notes.value.push({ ...note, id: docRef.id })
+        notes.value.unshift({ ...note, id: docRef.id })
         newNote.value = ''
       }
-    }
-
-    const updateNote = async (note: Note) => {
-      await updateDoc(doc(DB, 'notes', note.id), {
-        completed: note.completed
-      })
     }
 
     const deleteNote = async (id: string) => {
@@ -79,9 +45,102 @@ export default defineComponent({
       newNote,
       notes,
       addNote,
-      updateNote,
       deleteNote
     }
   }
 })
 </script>
+
+<template>
+  <div id="notes">
+    <h1>My notes</h1>
+    <form @submit.prevent="addNote">
+      <textarea v-model="newNote" placeholder="Add a new note" />
+      <button type="submit">Add Note</button>
+    </form>
+    <ul>
+      <li v-for="note in notes" :key="note.id">
+        <span>{{ note.text }}</span>
+        <button @click="deleteNote(note.id)">X</button>
+      </li>
+    </ul>
+  </div>
+</template>
+
+<style scoped>
+#notes {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  padding: 15px;
+
+  h1 {
+    font-family: Ubuntu;
+    color: #f6fff8;
+  }
+
+  form {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+
+    textarea {
+      padding: 10px 5px;
+      border: 1px solid #cce3de;
+      background: #a4c3b2;
+      border-radius: 5px;
+    }
+    button {
+      outline: none;
+      border: none;
+      padding: 10px 15px;
+      background-color: #eaf4f4;
+      cursor: pointer;
+      border-radius: 5px;
+      font-family: Ubuntu;
+      color: #6b9080;
+      width: 50%;
+    }
+  }
+
+  ul {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 5px;
+
+    li {
+      position: relative;
+      list-style-type: none;
+      display: flex;
+      justify-content: space-between;
+      gap: 15px;
+      padding: 5px;
+      border-radius: 5px;
+      border: 1px solid #cce3de;
+      background-color: #a4c3b2;
+      max-width: 350px;
+
+      span {
+        font-family: Ubuntu;
+        color: #f6fff8;
+        flex: 1;
+        text-overflow: ellipsis;
+      }
+
+      button {
+        height: 35px;
+        outline: none;
+        border: none;
+        padding: 10px 15px;
+        background-color: #eaf4f4;
+        cursor: pointer;
+        border-radius: 5px;
+        font-family: Ubuntu;
+        color: #6b9080;
+      }
+    }
+  }
+}
+</style>

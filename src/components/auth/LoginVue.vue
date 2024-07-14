@@ -1,31 +1,12 @@
 <script lang="ts">
-import { defineComponent, ref, onMounted } from 'vue'
-import {
-  GoogleAuthProvider,
-  signInWithPopup,
-  signOut,
-  onAuthStateChanged,
-  type User
-} from 'firebase/auth'
+import { defineComponent, ref } from 'vue'
+import { GoogleAuthProvider, signInWithPopup, type User } from 'firebase/auth'
 import { AUTH } from '../../firebaseConfig'
-import { useRouter } from 'vue-router'
 
 export default defineComponent({
   name: 'LoginVue',
   setup() {
     const user = ref<User | null>(null)
-    const router = useRouter()
-
-    onMounted(() => {
-      onAuthStateChanged(AUTH, (currentUser) => {
-        user.value = currentUser
-        if (currentUser) {
-          router.push('/notes')
-        } else {
-          router.push('/')
-        }
-      })
-    })
 
     // CONNEXION AVEC GOOGLE
     const loginWithGoogle = async () => {
@@ -38,29 +19,62 @@ export default defineComponent({
       }
     }
 
-    // DECONNEXION
-    const logout = async () => {
-      try {
-        await signOut(AUTH)
-      } catch (error) {
-        console.error('Error signin-out: ', error)
-      }
-    }
-
     return {
       user,
-      loginWithGoogle,
-      logout
+      loginWithGoogle
     }
   }
 })
 </script>
 
 <template>
-  <button v-if="!user" @click="loginWithGoogle">Login with Google</button>
-  <div v-else>
-    <img :src="user.photoURL" alt="User profile picture" v-if="user.photoURL" />
-    <span>{{ user.displayName }}</span>
-    <button @click="logout">Logout</button>
+  <div class="login">
+    <h1>Mini Notes</h1>
+    <div class="btn">
+      <img src="../../assets//googleLogo.svg" alt="Google logo" />
+      <button v-if="!user" @click="loginWithGoogle">Login with Google</button>
+    </div>
   </div>
 </template>
+
+<style scoped>
+.login {
+  width: 100%;
+  padding: 30px 15px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 30px;
+
+  h1 {
+    font-family: 'Dancing Script';
+    color: #f6fff8;
+    font-size: 60px;
+  }
+
+  .btn {
+    display: flex;
+    gap: 15px;
+    align-items: center;
+    justify-content: space-between;
+    background-color: #cce3de;
+    padding: 5px;
+    border-radius: 5px;
+
+    img {
+      width: 30px;
+      height: 30px;
+      object-fit: contain;
+    }
+
+    button {
+      outline: none;
+      border: none;
+      padding: 10px 25px;
+      background: transparent;
+      cursor: pointer;
+    }
+  }
+}
+</style>
