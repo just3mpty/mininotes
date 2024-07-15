@@ -1,29 +1,28 @@
 <!-- src/components/Notes.vue -->
 <script lang="ts">
-import { defineComponent, ref, onMounted } from 'vue'
-import { collection, addDoc, doc, deleteDoc, getDocs, query, orderBy } from 'firebase/firestore'
-import { DB } from '../firebaseConfig'
+import { DB } from '@/firebaseConfig'
+import { addDoc, collection, deleteDoc, doc, getDocs, orderBy, query } from 'firebase/firestore'
+import { defineComponent, onMounted, ref } from 'vue'
 
 interface Note {
   id: string
   text: string
-  completed: boolean
   createdAt: any
 }
 
 export default defineComponent({
   name: 'NotesPage',
   setup() {
-    const newNote = ref('')
+    const newNote = ref<string>('')
     const notes = ref<Note[]>([])
 
     const addNote = async () => {
       if (newNote.value.trim()) {
         const note = {
           text: newNote.value,
-          completed: false,
           createdAt: new Date()
         }
+
         const docRef = await addDoc(collection(DB, 'notes'), note)
         notes.value.unshift({ ...note, id: docRef.id })
         newNote.value = ''
@@ -38,7 +37,7 @@ export default defineComponent({
     onMounted(async () => {
       const q = query(collection(DB, 'notes'), orderBy('createdAt', 'desc'))
       const querySnapshot = await getDocs(q)
-      notes.value = querySnapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }) as Note)
+      notes.value = querySnapshot.docs.map((doc) => ({ id: doc.id, ...doc.data }) as Note)
     })
 
     return {
@@ -53,10 +52,10 @@ export default defineComponent({
 
 <template>
   <div id="notes">
-    <h1>My notes</h1>
+    <h1>Mini Notes</h1>
     <form @submit.prevent="addNote">
-      <textarea v-model="newNote" placeholder="Add a new note" />
-      <button type="submit">Add Note</button>
+      <textarea name="note" id="note" v-model="newNote" placeholder="Add a new note"> </textarea>
+      <button type="submit">Add note</button>
     </form>
     <ul>
       <li v-for="note in notes" :key="note.id">

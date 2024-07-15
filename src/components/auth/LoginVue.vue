@@ -1,21 +1,20 @@
 <script lang="ts">
-import { defineComponent, ref } from 'vue'
+import { AUTH } from '@/firebaseConfig'
 import { GoogleAuthProvider, signInWithPopup, type User } from 'firebase/auth'
-import { AUTH } from '../../firebaseConfig'
+import { ref, defineComponent } from 'vue'
 
 export default defineComponent({
   name: 'LoginVue',
   setup() {
     const user = ref<User | null>(null)
 
-    // CONNEXION AVEC GOOGLE
     const loginWithGoogle = async () => {
       const provider = new GoogleAuthProvider()
       try {
         const result = await signInWithPopup(AUTH, provider)
-        console.log('User signed in:', result.user)
+        console.log('User connected : ', result.user)
       } catch (error) {
-        console.error('Error signing in:', error)
+        console.error('Error login in: ', error)
       }
     }
 
@@ -31,13 +30,13 @@ export default defineComponent({
   <div class="login">
     <h1>Mini Notes</h1>
     <div class="btn">
-      <img src="../../assets//googleLogo.svg" alt="Google logo" />
+      <img src="../../assets/googleLogo.svg" alt="Google icon" />
       <button v-if="!user" @click="loginWithGoogle">Login with Google</button>
     </div>
   </div>
 </template>
 
-<style scoped>
+<style lang="scss" scoped>
 .login {
   width: 100%;
   padding: 30px 15px;
@@ -58,7 +57,7 @@ export default defineComponent({
     gap: 15px;
     align-items: center;
     justify-content: space-between;
-    background-color: #cce3de;
+    background-color: #cce4de;
     padding: 5px;
     border-radius: 5px;
 

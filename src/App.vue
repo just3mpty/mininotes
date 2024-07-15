@@ -1,10 +1,10 @@
 <script setup lang="ts">
 import '@/assets/globals.scss'
-import { useUser } from '@/store/user'
-import { onAuthStateChanged, signOut, type User } from 'firebase/auth'
-import { AUTH } from './firebaseConfig'
+import { useUser } from './store/user'
 import { onMounted, ref } from 'vue'
+import { onAuthStateChanged, signOut, type User } from 'firebase/auth'
 import { useRouter } from 'vue-router'
+import { AUTH } from './firebaseConfig'
 
 const { getUser } = useUser()
 const user = getUser()
@@ -26,7 +26,7 @@ const logout = async () => {
   try {
     await signOut(AUTH)
   } catch (error) {
-    console.error('Error signin-out: ', error)
+    console.error('Error signin out: ', error)
   }
   return logout
 }
@@ -38,8 +38,8 @@ const logout = async () => {
       <h2>Mini Notes</h2>
     </div>
     <div class="user">
-      <img alt="User profil picture" :src="user.user?.photoURL" v-if="user.user?.photoURL" />
-      <span>{{ user.user?.displayName }}</span>
+      <img :src="user.user.photoURL" alt="User profil picture" v-if="user.user.photoURL" />
+      <span>{{ user.user.displayName }}</span>
       <button v-if="user.user" @click="logout">Logout</button>
     </div>
   </header>

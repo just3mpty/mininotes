@@ -5,12 +5,12 @@ import { getFirestore } from 'firebase/firestore'
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
-  apiKey: 'AIzaSyAFT3QLahKKsXKWdX6bjmnji9QxwWDay7M',
-  authDomain: 'mininotes-899ec.firebaseapp.com',
-  projectId: 'mininotes-899ec',
-  storageBucket: 'mininotes-899ec.appspot.com',
-  messagingSenderId: '770484310343',
-  appId: '1:770484310343:web:48b483f6af0e658fe6fc62'
+  apiKey: 'AIzaSyB-Ar8HalB7QwNYO6REf7sQE5R2m7vOIjY',
+  authDomain: 'mininotes-4c421.firebaseapp.com',
+  projectId: 'mininotes-4c421',
+  storageBucket: 'mininotes-4c421.appspot.com',
+  messagingSenderId: '506620778878',
+  appId: '1:506620778878:web:3f62e2ea8d8ff3013dbb2f'
 }
 
 // Initialize Firebase
